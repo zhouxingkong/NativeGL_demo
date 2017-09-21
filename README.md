@@ -13,5 +13,41 @@
 ## 2方案实现方法
 
 使用本方案需要注意以下几点：
-1. 编写CmakeList.txt,添加如下语句。如果不添加会使程序编译GG。
+1. 编写CMakeLists.txt,添加如下语句。如果不添加会使程序编译GG。
+```
+# now build app's shared lib
+#不加这句不能用std命名空间的函数
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 
+#使用这句将编译后的native-lib库和android、log、EGL、GLESv2四个库进行链接。
+#不加这个会GG，将导致上面提到的四个功能无法使用
+target_link_libraries( # Specifies the target library.
+                       native-lib
+                       # Links the target library to the log library
+                       # included in the NDK.
+                       android
+                       log
+                       EGL
+                       GLESv2 )
+```
+2. 在布局文件中定义一个SurfaceView，并实现SurfaceHolder.Callback接口。在接口中使用JNI调用GLRender.SetWindow函数将SurfaceView与NativeWindow关联。以以便在Native空间进行绘图。
+``` c++
+public class SViewHolder implements SurfaceHolder.Callback {
+//...............
+    public void surfaceCreated(SurfaceHolder holder) {
+        JNIProxy.SetSurfaceS(holder.getSurface());
+        JNIProxy.StartRenderS();
+    }
+//................
+}
+```
+3. 在Native空间继承GLRenderer类，并实现GLRenderer类中的以下抽象函数。不实现程序会GG
+``` c++
+/*
+ * 下面三个函数为OpenGL渲染上下文回调函数，这三个函数需要用户通过继承GLRenderer类的方法来实现
+ * 实现方法同android.opengl.GLSurfaceView.Render中的方法。详细请参考develop.google
+ * */
+virtual void SurfaceCreate()=0;
+virtual void SurfaceChange(int width, int height)=0;
+virtual void DrawFrame()=0;
+```
