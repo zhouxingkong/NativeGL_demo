@@ -14,7 +14,7 @@
 
 使用本方案需要注意以下几点：
 1. 编写CMakeLists.txt,添加如下语句。如果不添加会使程序编译GG。
-```
+``` cmake
 # now build app's shared lib
 #不加这句不能用std命名空间的函数
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
