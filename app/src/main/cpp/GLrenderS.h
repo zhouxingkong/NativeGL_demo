@@ -28,9 +28,11 @@ public:
     ~GLrenderS();
     void loadTexture();
     void cal_pixel();
-    void SurfaceCreate();
-    void SurfaceChange(int width, int height);
-    void DrawFrame();
+
+    //实现OpenGL渲染上下文的回调函数
+    virtual void SurfaceCreate();
+    virtual void SurfaceChange(int width, int height);
+    virtual void DrawFrame();
 };
 
 

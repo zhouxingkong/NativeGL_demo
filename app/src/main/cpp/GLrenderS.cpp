@@ -54,9 +54,6 @@ void GLrenderS::loadTexture(){
     glBindTexture(GL_TEXTURE_2D, textureId);
     glUniform1i(uTextureUnitLocation, 0);
 
-    sb_data=new unsigned char[1024*64];
-    memset(sb_data,100,1024*64);
-
     glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, 1024, 64, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, sb_data);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); //放大缩小使用的函数
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -77,6 +74,8 @@ void GLrenderS::cal_pixel() {
         gScreenVertices[4*i+2]=0.0+R*cos(theta);
         gScreenVertices[4*i+3]=oy+R*sin(theta);
     }
+    sb_data=new unsigned char[1024*64];
+    memset(sb_data,100,1024*64);
 
 }
 
